@@ -44,6 +44,12 @@ public class Utility {
 
     }
 
+    public Cart getCartByCartId(long cartId){
+
+        return cartClient.getItemByCartId(cartId);
+
+    }
+
     public void clearCartForUser(long userId) {
         cartClient.removeByUserID(userId);
     }
@@ -52,6 +58,11 @@ public class Utility {
 
     public void changeBookQuantity(long bookId, int quantity) {
         bookClient.increaseBookQuantity(bookId,quantity);
+    }
+
+
+    public void clearCartByCartId(long cartId) {
+        cartClient.removeByCartId(cartId);
     }
 
 

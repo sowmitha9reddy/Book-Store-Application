@@ -18,4 +18,10 @@ public interface CartClient {
 
     @GetMapping(value="/Cart/getCartItemsForUser/{userId}")
     public List<Cart> getAllCartItemsForUser(@PathVariable long userId);
+
+    @GetMapping(value="/Cart/getItemByCartId/{cartId}")
+    public Cart getItemByCartId(@PathVariable long cartId);
+
+    @DeleteMapping(value="/Cart/deleteCartDetailsByCartID/{cartId}")
+     public void removeByCartId( @PathVariable long cartId);
 }

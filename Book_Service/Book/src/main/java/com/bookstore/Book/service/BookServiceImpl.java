@@ -26,7 +26,8 @@ public class BookServiceImpl  implements BookServiceDao {
 
 
        Book book = new Book(bookDto);
-      book.setLogo(file.getBytes());
+      //book.setLogo(file.getBytes());
+      book.setLogo(file.getOriginalFilename());
        return BookMapper.mapDtoToBook(bookRepository.save(book));
 
     }
@@ -38,7 +39,8 @@ public class BookServiceImpl  implements BookServiceDao {
         book.setBookAuthor(bookDto.getBookAuthor());
         book.setBookName(bookDto.getBookName());
         book.setDescription(bookDto.getDescription());
-        book.setLogo(file.getBytes());
+       // book.setLogo(file.getBytes());
+        book.setLogo(file.getOriginalFilename());
         book.setPrice(bookDto.getPrice());
         book.setQuantity(bookDto.getQuantity());
 

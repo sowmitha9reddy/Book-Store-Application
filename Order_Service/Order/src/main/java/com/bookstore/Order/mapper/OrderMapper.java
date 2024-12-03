@@ -31,6 +31,7 @@ public class OrderMapper {
         User user=utility.getUser(id);
         //orderDto.setUser(user);
         orderDto.setName(user.getFirstName()+" "+user.getLastName());
+
         orderDto.setEmail(user.getEmailId());
         List<Address> addresses = user.getAddress();
         Address userAddress = addresses.stream()

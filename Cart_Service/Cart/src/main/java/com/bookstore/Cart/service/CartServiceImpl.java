@@ -50,9 +50,28 @@ public class CartServiceImpl implements CartDao {
 
 
     @Override
-    public CartDto updateBook(long cartId, int quantity) {
+    public CartDto increaseCartQuantity(long cartId, int quantity) {
         Cart cart=cartRepository.findById(cartId).orElseThrow(() ->new CartNotFoundException("Cart Id Not Found"));
-        cart.setQuantity(quantity);
+
+        Book book=bookClient.getBook(cart.getBookId());
+
+        if(book.getQuantity()>quantity) {
+            cart.setQuantity(cart.getQuantity() + quantity);
+
+        }
+        return CartMapper.mapDtoToCart(addTocart(cart));
+
+
+    }
+
+    @Override
+    public CartDto decreaseCartQuantity(long cartId, int quantity) {
+        Cart cart=cartRepository.findById(cartId).orElseThrow(() ->new CartNotFoundException("Cart Id Not Found"));
+        Book book=bookClient.getBook(cart.getBookId());
+
+        if(book.getQuantity()>quantity) {
+            cart.setQuantity(cart.getQuantity() - quantity);
+        }
         return CartMapper.mapDtoToCart(addTocart(cart));
 
     }
@@ -112,4 +131,14 @@ public class CartServiceImpl implements CartDao {
     }
 
 
+    public Cart getItemByCartId(long cartId) {
+        return cartRepository.findById(cartId).orElseThrow(() ->new CartNotFoundException("Cart Id Not Found"));
+    }
+
+    @Transactional
+    public void removeFromCartByCartId(long cartId) {
+        Cart item=cartRepository.findById(cartId).orElseThrow(() ->new CartNotFoundException("Cart Id Not Found"));
+        bookClient.increaseBookQuantity(item.getBookId(), item.getQuantity());
+        cartRepository.delete(item);
+    }
 }

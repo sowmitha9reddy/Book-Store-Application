@@ -28,8 +28,9 @@ public class Book {
     @Column(length = 1000)
     private String description;
 
-    @Lob
-    private byte[] logo; // To store the book logo as binary data
+//    @Lob
+//    private byte[] logo; // To store the book logo as binary data
+    private String logo;
 
     @Column(nullable = false)
     private long price;

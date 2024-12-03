@@ -25,10 +25,14 @@ public class Book {
     private String description;
 
 
-    private byte[] logo;
+    //private byte[] logo;
+    private String logo;
+
 
 
     private long price;
+
+    private int quantity;
 
 
 

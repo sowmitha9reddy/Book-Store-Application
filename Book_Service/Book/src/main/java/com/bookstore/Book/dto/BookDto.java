@@ -21,7 +21,9 @@ public class BookDto {
     private String description;
 
 
-    private byte[] logo; // To store the book logo as binary data
+//    private byte[] logo; // To store the book logo as binary data
+   private String logo;
+
 
     private long price;
 

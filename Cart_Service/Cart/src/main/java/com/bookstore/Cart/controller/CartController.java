@@ -52,7 +52,7 @@ public class CartController {
         return null;
     }
 
-    private Book getBookById(Long bookId)
+    public Book getBookById(Long bookId)
     {
         Book book = bookClient.getBook(bookId);
         return  book;
@@ -75,10 +75,17 @@ public class CartController {
     }
 
    //updating the cart details
-    @PostMapping(value="/updateCartDetails/{cartId}/{quantity}")
-    public CartDto updateBook(@PathVariable long cartId,@PathVariable int quantity) {
+    @PutMapping (value="/updateCartDetails/{cartId}/{quantity}")
+    public CartDto increaseCartQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable long cartId,@PathVariable int quantity) {
 
-       return cartServiceImpl.updateBook(cartId,quantity);
+       return cartServiceImpl.increaseCartQuantity(cartId,quantity);
+
+    }
+
+    @PutMapping (value="/updateCartDetailsDecreaseCart/{cartId}/{quantity}")
+    public CartDto decreaseCartQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable long cartId,@PathVariable int quantity) {
+
+        return cartServiceImpl.decreaseCartQuantity(cartId,quantity);
 
     }
 
@@ -132,6 +139,17 @@ public class CartController {
 
     }
 
+    @GetMapping(value="/getItemByCartId/{cartId}")
+    public Cart getItemByCartId(@PathVariable long cartId) {
+        return cartServiceImpl.getItemByCartId(cartId);
+
+    }
+
+
+    @DeleteMapping(value="/deleteCartDetailsByCartID/{cartId}")
+    public void removeByCartId(@PathVariable long cartId){
+        cartServiceImpl.removeFromCartByCartId(cartId);
+    }
 
 
 

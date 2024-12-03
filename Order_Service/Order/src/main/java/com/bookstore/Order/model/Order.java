@@ -1,15 +1,11 @@
 package com.bookstore.Order.model;
 
-import com.bookstore.Order.dto.OrderDto;
-import com.bookstore.Order.external.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +17,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Order {
     @Id
     @GeneratedValue
@@ -42,6 +37,10 @@ public class Order {
     @JsonIgnore
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Order{id=" + orderId + ", orderDate=" + orderDate + ", totalAmount=" +totalPrice + "}";
+    }
 
 
 }

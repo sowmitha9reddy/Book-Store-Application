@@ -29,6 +29,16 @@ public class OrderController {
         return new ResponseEntity<>(orderService.PlaceOrder(userId,addressId), HttpStatus.OK);
     }
 
+
+    @PostMapping(value="/placeOrder/{addressId}/{cartId}")
+    public ResponseEntity<?> placeOrderByCartId(@RequestHeader("Authorization") String authHeader,@PathVariable long addressId,@PathVariable long cartId) {
+        System.out.println(authHeader);
+        User isAdmin = utility.getAuthenticatedAdminUser(authHeader);
+        System.out.println(isAdmin);
+        //long userId = isAdmin.getUserId();
+        return new ResponseEntity<>(orderService.PlaceOrderByCartId(isAdmin,addressId,cartId), HttpStatus.OK);
+    }
+
     @DeleteMapping(value="/canceltheOrder/{orderId}")
     public ResponseEntity<?> cancelOrder(@RequestHeader("Authorization") String authHeader,@PathVariable long orderId){
         User isAdmin = utility.getAuthenticatedAdminUser(authHeader);
