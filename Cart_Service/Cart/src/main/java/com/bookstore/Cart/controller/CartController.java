@@ -76,14 +76,14 @@ public class CartController {
 
    //updating the cart details
     @PutMapping (value="/updateCartDetails/{cartId}/{quantity}")
-    public CartDto increaseCartQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable long cartId,@PathVariable int quantity) {
+    public ResponseEntity<?> increaseCartQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable long cartId,@PathVariable int quantity) {
 
        return cartServiceImpl.increaseCartQuantity(cartId,quantity);
 
     }
 
     @PutMapping (value="/updateCartDetailsDecreaseCart/{cartId}/{quantity}")
-    public CartDto decreaseCartQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable long cartId,@PathVariable int quantity) {
+    public ResponseEntity<?> decreaseCartQuantity(@RequestHeader("Authorization") String authHeader,@PathVariable long cartId,@PathVariable int quantity) {
 
         return cartServiceImpl.decreaseCartQuantity(cartId,quantity);
 

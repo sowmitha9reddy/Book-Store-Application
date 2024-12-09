@@ -4,6 +4,7 @@ import com.bookstore.Cart.dto.CartDto;
 import com.bookstore.Cart.exceptionHandling.CartNotFoundException;
 import com.bookstore.Cart.mapper.CartMapper;
 import com.bookstore.Cart.model.Cart;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface CartDao  {
 
     public Cart addTocart(Cart cart);
 
-    public CartDto increaseCartQuantity(long cartId, int quantity);
+    public ResponseEntity<?> increaseCartQuantity(long cartId, int quantity);
 
-    public CartDto decreaseCartQuantity(long cartId, int quantity);
+    public ResponseEntity<?> decreaseCartQuantity(long cartId, int quantity);
 
     public void removeFromCart(long cartId);
 

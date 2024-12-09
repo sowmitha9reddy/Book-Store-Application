@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 @RestController
 @RequestMapping("/Order")
 public class OrderController {
@@ -48,12 +50,16 @@ public class OrderController {
     }
 
     @GetMapping(value = "/getAllOrders")
+//    @CircuitBreaker(name ="userService",fallbackMethod = "getAllAvailableProducts")
+//    @Retry(name = "userService",fallbackMethod = "getAllAvailableProducts")
     public ResponseEntity<?> getAllOrders(@RequestHeader("Authorization") String authHeader){
         User isAdmin = utility.getAuthenticatedAdminUser(authHeader);
         System.out.println(isAdmin);
         return new ResponseEntity<>(orderService.getAllOrders(),HttpStatus.OK);
     }
-
+//    public ResponseEntity<?> getAllAvailableProducts(Exception e){
+//        return new ResponseEntity<>(Collections.emptyList(),HttpStatus.OK);
+//    }
     @GetMapping(value = "/getAllOrdersOfUser")
     public ResponseEntity<?> getAllOrdersOfUser(@RequestHeader("Authorization") String authHeader){
         User isAdmin = utility.getAuthenticatedAdminUser(authHeader);

@@ -11,13 +11,14 @@ import com.bookstore.Order.model.OrderItem;
 import com.bookstore.Order.repository.OrderRepository;
 import com.bookstore.Order.util.EmailService;
 import com.bookstore.Order.util.Utility;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,8 +111,6 @@ public class OrderService implements OrderDao {
         //Fetch cart items for the user
         Cart cartItem = utility.getCartByCartId(cartId);
 
-
-
         // Create a new Order entity
         Order order = new Order();
 
@@ -125,23 +124,20 @@ public class OrderService implements OrderDao {
         float totalPrice = 0;
         int totalQuantity = 0;
 
+        // Create an OrderItem entity for each cart item
+        OrderItem orderItem=new OrderItem();
 
+        orderItem.setBookId(cartItem.getBookId());
+        orderItem.setPrice(cartItem.getTotalPrice());
+        orderItem.setQuantity(cartItem.getQuantity());
+        orderItem.setOrder(order); //set order item to the appropriate order
 
-            // Create an OrderItem entity for each cart item
-            OrderItem orderItem=new OrderItem();
+        // Add order item to the order
+        order.getOrderItems().add(orderItem);
 
-            orderItem.setBookId(cartItem.getBookId());
-            orderItem.setPrice(cartItem.getTotalPrice());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setOrder(order); //set order item to the appropriate order
-
-            // Add order item to the order
-            order.getOrderItems().add(orderItem);
-
-            // Update total price and total quantity
-            totalPrice += cartItem.getTotalPrice();
-            totalQuantity += cartItem.getQuantity();
-
+        // Update total price and total quantity
+        totalPrice += cartItem.getTotalPrice();
+        totalQuantity += cartItem.getQuantity();
 
         //  Set the total price and total quantity in the Order
         order.setTotalPrice(totalPrice);
@@ -189,20 +185,25 @@ public class OrderService implements OrderDao {
 
     //Get All Orders
     @Override
-    @CircuitBreaker(name = "companyBreaker")//,fallbackMethod = "companyBreakerFallback")
+  //@CircuitBreaker(name = "userService",fallbackMethod = "cartBreakerFallback")
     public List<OrderDto> getAllOrders() {
         List<Order> allOrders=orderRepository.findAll();
-        return allOrders.stream().map(OrderMapper::orderMapperToOrderDto).collect(Collectors.toList());
+        return allOrders.stream()
+                .filter(order -> !order.isCancel())
+                .map(OrderMapper::orderMapperToOrderDto).collect(Collectors.toList());
     }
 
-    public String companyBreakerFallback(){
-        return "Services unavailable try after some time or refresh";
-    }
+//    public List<OrderDto> cartBreakerFallback(Throwable throwable) {
+//
+//        return Collections.emptyList();
+//    }
 
     //Get All orders For the User
     @Override
     public List<OrderDto> getAllOrdersForUser(long userId) {
         List<Order> allOrdersOfUser=orderRepository.findAllByUserId(userId);
-        return  allOrdersOfUser.stream().map(order -> OrderMapper.orderMapperToOrderDto(order)).collect(Collectors.toList());
+        return  allOrdersOfUser.stream()
+                .filter(order -> !order.isCancel())
+                .map(order -> OrderMapper.orderMapperToOrderDto(order)).collect(Collectors.toList());
     }
 }
